@@ -50,8 +50,10 @@ public class Ioc {
 		}
 		return ioc;
 	}
-
-	public  void init(Application app) {
+	public  void init(Application app){
+		init(app,true);
+	}
+	public  void init(Application app,boolean isInjectView) {
 		
 		long time = System.currentTimeMillis();
 		// registerActivityLifecycleCallbacks(callbacks);
@@ -75,8 +77,10 @@ public class Ioc {
 		// 开启线程来提前遍历需要注入的activity
 		initThread.start();
 		// --------------------------------------------------------------------------------------------------
-		// 整个框架的核心
-		InjectViewUtils.setApplication(application);
+		if(isInjectView) {
+			// 整个框架的核心
+			InjectViewUtils.setApplication(application);
+		}
 		// 反射获取mMainThread
 		// getBaseContext()返回的是ContextImpl对象 ContextImpl中包含ActivityThread mMainThread这个对象
 		Object mainThread = KernelObject.declaredGet(application.getBaseContext(), "mMainThread");

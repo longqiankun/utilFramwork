@@ -18,6 +18,27 @@ import android.widget.Toast;
  * @Email:qiankun.long@dilitech.com
  */
 public class ToastUtils {
+	private static int textsize=15;
+	private static int textColor=Color.WHITE;
+	private static int bg=android.R.drawable.toast_frame;
+
+	public static void setTextsize(int textsize) {
+		ToastUtils.textsize = textsize;
+	}
+
+	public static void setTextColor(int textColor) {
+		ToastUtils.textColor = textColor;
+	}
+
+	public static void setBg(int bg) {
+		ToastUtils.bg = bg;
+	}
+
+	public static void setStyle(int textsize,int textColor,int bg){
+		ToastUtils.textsize = textsize;
+		ToastUtils.textColor = textColor;
+		ToastUtils.bg = bg;
+	}
 	/**
 	 * 
 	* @Title: showToast
@@ -28,30 +49,7 @@ public class ToastUtils {
 	* @throws
 	 */
 	public static void showToast(Activity activity,String text){
-		Toast toast = new Toast(activity);
-		 LinearLayout linearLayout = new LinearLayout(activity);
-		 linearLayout.setOrientation(LinearLayout.VERTICAL); 
-		 linearLayout.setPadding(20, 20, 20, 20);
-		
-	/*	// 定义一个ImageView
-		 ImageView imageView = new ImageView(activity);
-		 imageView.setImageResource(R.drawable.voice_to_short); // 图标
-*/		 
-		 TextView mTv = new TextView(activity);
-		 mTv.setText(text);
-		 mTv.setTextSize(20);
-		 mTv.setTextColor(Color.WHITE);//字体颜色
-		 //mTv.setPadding(0, 10, 0, 0);
-		 
-		// 将ImageView和ToastView合并到Layout中
-//		 linearLayout.addView(imageView);
-		 linearLayout.addView(mTv);
-		 linearLayout.setGravity(Gravity.CENTER);//内容居中
-		 linearLayout.setBackgroundResource(android.R.drawable.toast_frame);//设置自定义toast的背景
-		 
-		 toast.setView(linearLayout); 
-		 toast.setGravity(Gravity.CENTER, 0,0);//起点位置为中间     100为向下移100dp
-		 toast.show();				
+		showToast(activity.getApplicationContext(),text);
 	}
 	/**
 	 * 
@@ -66,7 +64,7 @@ public class ToastUtils {
 		Toast toast = new Toast(activity);
 		 LinearLayout linearLayout = new LinearLayout(activity);
 		 linearLayout.setOrientation(LinearLayout.VERTICAL); 
-		 linearLayout.setPadding(20, 20, 20, 20);
+		 linearLayout.setPadding(20, 5, 5, 20);
 		
 	/*	// 定义一个ImageView
 		 ImageView imageView = new ImageView(activity);
@@ -74,15 +72,15 @@ public class ToastUtils {
 */		 
 		 TextView mTv = new TextView(activity);
 		 mTv.setText(text);
-		 mTv.setTextSize(20);
-		 mTv.setTextColor(Color.WHITE);//字体颜色
+		 mTv.setTextSize(textsize);
+		 mTv.setTextColor(textColor);//字体颜色
 		 //mTv.setPadding(0, 10, 0, 0);
 		 
 		// 将ImageView和ToastView合并到Layout中
 //		 linearLayout.addView(imageView);
 		 linearLayout.addView(mTv);
 		 linearLayout.setGravity(Gravity.CENTER);//内容居中
-		 linearLayout.setBackgroundResource(android.R.drawable.toast_frame);//设置自定义toast的背景
+		 linearLayout.setBackgroundResource(bg);//设置自定义toast的背景
 		 
 		 toast.setView(linearLayout); 
 		 toast.setGravity(Gravity.CENTER, 0,0);//起点位置为中间     100为向下移100dp
