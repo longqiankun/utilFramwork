@@ -170,7 +170,7 @@ public class NetWorkUtils {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = manager.getActiveNetworkInfo();
 		String message = "null";
-		if (info == null || !info.isConnected()) {
+		if (info == null || !info.isConnected() || info.getState() != NetworkInfo.State.CONNECTED) {
 			return false;
 		}
 		if (info != null)
