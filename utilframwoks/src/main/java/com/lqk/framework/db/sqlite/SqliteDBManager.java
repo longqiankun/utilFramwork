@@ -8,11 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteOpenHelper;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -167,16 +168,22 @@ public class SqliteDBManager {
 		 * SQLiteDatabase.loadLibs(mContext); SQLiteDatabase.create(null,
 		 * Encrypt);
 		 */
-		SQLiteDatabase.loadLibs(mContext);
+		/*SQLiteDatabase.loadLibs(mContext);
 
 		mWriteDatabase = DatabaseHelper.getInstance(mContext)
 				.getWritableDatabase(Encrypt);
 		mReadDatabase = DatabaseHelper.getInstance(mContext)
-				.getReadableDatabase(Encrypt);
+				.getReadableDatabase(Encrypt);*/
+
+		mWriteDatabase = DatabaseHelper.getInstance(mContext)
+				.getWritableDatabase();
+		mReadDatabase = DatabaseHelper.getInstance(mContext)
+				.getReadableDatabase();
 	}
 
 	private SQLiteDatabase openDatabase(String dbfile) {
-		SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbfile,Encrypt, null);
+//		SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbfile,Encrypt, null);
+		SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
 		return db;
 	}
 
@@ -718,19 +725,6 @@ public class SqliteDBManager {
 	/**
 	 * 
 	 * 描述: 多条件查询，模糊查询的组合
-	 * 
-	 * @param tableName
-	 *            表名
-	 * @param names
-	 *            条件的列名
-	 * @param values
-	 *            列名对应的值
-	 * @param likekey
-	 *            模糊查询的列
-	 * @param likevalue
-	 *            模糊查询的值
-	 * @param columns
-	 *            返回的列
 	 * @return
 	 */
 	public synchronized <T> List<T> findByLike(T t, String[] names,

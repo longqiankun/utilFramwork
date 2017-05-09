@@ -75,12 +75,13 @@ public class Ioc {
 		}
 		// --------------------------------------------------------------------------------------------------
 		// 开启线程来提前遍历需要注入的activity
-		initThread.start();
+
 		// --------------------------------------------------------------------------------------------------
 		if(isInjectView) {
+			initThread.start();
 			// 整个框架的核心
 			InjectViewUtils.setApplication(application);
-		}
+
 		// 反射获取mMainThread
 		// getBaseContext()返回的是ContextImpl对象 ContextImpl中包含ActivityThread mMainThread这个对象
 		Object mainThread = KernelObject.declaredGet(application.getBaseContext(), "mMainThread");
@@ -95,6 +96,7 @@ public class Ioc {
 		KernelReflect.set(mainThread, instrumentationField, instrumentation);
 		// --------------------------------------------------------------------------------------------------
 		logger.d("appliaction 加载时间为:" + (System.currentTimeMillis() - time));
+		}
 	}
 
 	Thread initThread = new Thread() {
