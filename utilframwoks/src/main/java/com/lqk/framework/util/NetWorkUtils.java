@@ -170,13 +170,13 @@ public class NetWorkUtils {
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = manager.getActiveNetworkInfo();
 		String message = "null";
-		if (info == null || !info.isConnected() || info.getState() != NetworkInfo.State.CONNECTED) {
-			return false;
+		if (info != null && info.isConnected() && info.getState() == NetworkInfo.State.CONNECTED) {
+			return true;
 		}
 		if (info != null)
 			message = info.toString();
 		Log.d("wifi", "infonet is :" + message);
-		return true;
+		return false;
 	}
 /**
  * 
