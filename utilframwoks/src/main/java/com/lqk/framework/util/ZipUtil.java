@@ -76,6 +76,7 @@ public class ZipUtil {
 		try {
 			ZipFile zf = new ZipFile(zipfile);
 			for (Enumeration entries = zf.entries(); entries.hasMoreElements();) {
+				try {
 				ZipEntry entry = (ZipEntry) entries.nextElement();
 				String zipEntryName = entry.getName();
 				InputStream in = zf.getInputStream(entry);
@@ -87,6 +88,9 @@ public class ZipUtil {
 				}
 				in.close();
 				out.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
