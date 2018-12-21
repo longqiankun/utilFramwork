@@ -186,10 +186,8 @@ public class SdCardUtils {
 	* @throws
 	 */
 	public static String getAppName(Context context)throws NameNotFoundException{
-		PackageManager pm=context.getPackageManager();
-		ApplicationInfo info = pm.getApplicationInfo(context.getPackageName(), 0);
-		String appName=info.loadLabel(pm).toString();
-		appName=HanziToPinyin.getInstance().convert(appName, true);
+		String appName=Handler_System.getAppName();
+		appName = HanziToPinyin.getInstance().convert(appName, true);
 		return appName;
 	}
 	/**
