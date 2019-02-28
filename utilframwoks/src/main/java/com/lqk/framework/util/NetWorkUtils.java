@@ -145,6 +145,7 @@ public class NetWorkUtils {
 	* @throws
 	 */
 	public static boolean isNetWork(Context context) {
+		if(context == null) return false;
 		WifiManager mWifiManager = (WifiManager) context
 		.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
