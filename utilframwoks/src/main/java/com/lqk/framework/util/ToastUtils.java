@@ -3,6 +3,8 @@ package com.lqk.framework.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +50,8 @@ public class ToastUtils {
 	* @return void
 	* @throws
 	 */
-	public static void showToast(Activity activity,String text){
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+	public static void showToast(Activity activity, String text){
 		showToast(activity.getApplicationContext(),text);
 	}
 	/**
@@ -60,7 +63,13 @@ public class ToastUtils {
 	* @return void
 	* @throws
 	 */
-	public static void showToast(Context activity,String text){
+	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+	public static void showToast(Context activity, String text){
+		if(activity == null)return;
+		try {
+			if (activity instanceof Activity && ((Activity) activity).isDestroyed()) return;
+		}catch (Exception e){e.printStackTrace();}
+
 		Toast toast = new Toast(activity);
 		 LinearLayout linearLayout = new LinearLayout(activity);
 		 linearLayout.setOrientation(LinearLayout.VERTICAL); 
