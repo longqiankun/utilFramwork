@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lqk.utilframwoks.R;
+
 /**   
  * @Title: ToastUtils.java 
  * @Package com.dilitech.qiyebao.utils 
@@ -20,9 +22,9 @@ import android.widget.Toast;
  * @Email:qiankun.long@dilitech.com
  */
 public class ToastUtils {
-	private static int textsize=15;
+	private static int textsize=12;
 	private static int textColor=Color.WHITE;
-	private static int bg=android.R.drawable.toast_frame;
+	private static int bg= R.drawable.toast_bg;
 
 	public static void setTextsize(int textsize) {
 		ToastUtils.textsize = textsize;
@@ -52,6 +54,7 @@ public class ToastUtils {
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 	public static void showToast(Activity activity, String text){
+		if(activity == null)return;
 		showToast(activity.getApplicationContext(),text);
 	}
 	/**
