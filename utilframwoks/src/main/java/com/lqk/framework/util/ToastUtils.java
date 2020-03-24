@@ -70,7 +70,7 @@ public class ToastUtils {
 	public static void showToast(Context activity, String text){
 		if(activity == null)return;
 		try {
-			if (activity instanceof Activity && ((Activity) activity).isDestroyed()) return;
+			if (activity instanceof Activity && (((Activity) activity).isDestroyed() || ((Activity) activity).isFinishing())) return;
 		}catch (Exception e){e.printStackTrace();}
 
 		Toast toast = new Toast(activity);
