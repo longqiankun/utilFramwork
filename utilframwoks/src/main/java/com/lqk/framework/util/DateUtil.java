@@ -380,7 +380,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String currentDate() {
-		return dateFormat.format(now());
+		return dateFormat.format(new Date());
 	}
 
 	/**
@@ -391,7 +391,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String currentDateTimeNoSecond() {
-		return datetimeFormat2.format(now());
+		return datetimeFormat2.format(new Date());
 	}
 
 	/**
@@ -435,7 +435,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String currentTime() {
-		return timeFormat.format(now());
+		return timeFormat.format(new Date());
 	}
 
 	/**
