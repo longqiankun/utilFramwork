@@ -9,6 +9,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.os.StatFs;
+
+import com.lqk.framework.app.Ioc;
+
 /**
  * 
 * @ClassName: SdCardUtils
@@ -82,8 +85,11 @@ public class SdCardUtils {
 	* @return String
 	* @throws
 	 */
+	public  static File getSDRootFile(){
+		return Ioc.getIoc().getApplication().getFilesDir();
+	}
 	public  static String getSDRoot(){
-		return Environment.getExternalStorageDirectory().getAbsolutePath();
+		return getSDRootFile().getAbsolutePath();
 	}
 	public String getSDAppRoot(Context context) throws NameNotFoundException{
 		return getSDRoot()+"/"+getAppName(context);

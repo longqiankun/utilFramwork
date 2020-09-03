@@ -66,6 +66,7 @@ build/
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/libraries
+.idea/gradle.xml
 
 
 # Built application files
@@ -135,5 +136,3 @@ build.xml
 proguard-project.txt
 
 Shiqichuban.jks
-app/src/main/res/drawable/
-utilframwoks/src/main/res/drawable/
