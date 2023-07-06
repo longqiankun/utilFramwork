@@ -258,5 +258,7 @@ public class SdCardUtils {
 		createFile(path);
 		return path;
 	}
-
+	public static String getExtraSDRoot() {
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
+	}
 }
