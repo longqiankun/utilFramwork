@@ -4,13 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,16 +24,18 @@ import android.net.TrafficStats;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
-/** 
+/**
  * @Company: Dilitech
  * @author longqiankun
  * @email qiankun.long@dilitech.com
  * @Title: NetWorkUtils.java
  * @Description: 网络工具类
- * @version 1.0  
+ * @version 1.0
  * @created 2013-12-21 上午10:03:59 
  */
 
@@ -40,10 +47,10 @@ public class NetWorkUtils {
 	private TelephonyManager telephonyManager;
 	private String IMSI;
 	private Context mContext;
-	public static final int NETWORK_TYPE_NONE = -0x1; 
-	public static final int NETWORK_TYPE_WIFI = 0x1; 
-	public static final int NETWOKR_TYPE_MOBILE = 0x2; 
-	
+	public static final int NETWORK_TYPE_NONE = -0x1;
+	public static final int NETWORK_TYPE_WIFI = 0x1;
+	public static final int NETWOKR_TYPE_MOBILE = 0x2;
+
 	public NetWorkUtils(Context mContext) {
 		super();
 		// TODO Auto-generated constructor stub
@@ -51,10 +58,10 @@ public class NetWorkUtils {
 		telephonyManager = (TelephonyManager) mContext
 				.getSystemService(Context.TELEPHONY_SERVICE);
 	}
-	
+
 	/**
 	 * 检测手机是否开启GPRS网络,需要调用ConnectivityManager,TelephonyManager 服务.
-	 * 
+	 *
 	 * @param context
 	 * @return boolean
 	 */
@@ -76,7 +83,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 检测手机是否开启WIFI网络,需要调用ConnectivityManager服务.
-	 * 
+	 *
 	 * @param context
 	 * @return boolean
 	 */
@@ -96,7 +103,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 检测当前手机是否联网
-	 * 
+	 *
 	 * @param context
 	 * @return boolean
 	 */
@@ -119,7 +126,7 @@ public class NetWorkUtils {
 
 	/**
 	 * 手机是否处在漫游
-	 * 
+	 *
 	 * @param mCm
 	 * @return boolean
 	 */
@@ -136,7 +143,7 @@ public class NetWorkUtils {
 	}
 
 	/**
-	 * 
+	 *
 	* @Title: isNetWork
 	* @Description: 检查是否链接网络
 	* @param @param context
@@ -158,7 +165,7 @@ public class NetWorkUtils {
 		return isOtherNet(context);
 	}
 /**
- * 
+ *
 * @Title: isOtherNet
 * @Description: 检查是否连接其他网络
 * @param @param context
@@ -180,7 +187,7 @@ public class NetWorkUtils {
 		return false;
 	}
 /**
- * 
+ *
 * @Title: getCurrentNetType
 * @Description: 获取当前网络类型
 * @param @param mContext
@@ -209,7 +216,7 @@ public class NetWorkUtils {
 //		return "断开网络";
 	}
 	/**
-	 * 
+	 *
 	* @Title: getCurrentNetInfo
 	* @Description: 获取当前网络信息
 	* @param @param mContext
@@ -240,8 +247,8 @@ public class NetWorkUtils {
 				infos[2]=(offset/1024)+"ms";
 			}
 			ShareData.setLong(mContext, "bytes", receiver);*/
-			
-			
+
+
 		}else{
 			infos[0]="无网络";
 			infos[1]="无连接";
@@ -250,13 +257,14 @@ public class NetWorkUtils {
 		return infos;
 }
 /**
- * 
+ *
 * @Title: getNativePhoneNumber
 * @Description: 获取本地电话号码
 * @param @return
 * @return String
 * @throws
  */
+	@SuppressLint("MissingPermission")
 	public String getNativePhoneNumber() {
 		String NativePhoneNumber = null;
 		NativePhoneNumber = telephonyManager.getLine1Number();
@@ -270,6 +278,7 @@ public class NetWorkUtils {
 * @return String
 * @throws
  */
+	@SuppressLint("MissingPermission")
 	public String getProvidersName() {
 
 		String ProvidersName = null;
@@ -317,7 +326,7 @@ public class NetWorkUtils {
 		String ip="";
 		WifiInfo info = (null == wifiManager ? null : wifiManager.getConnectionInfo());  
 		if (null != info) {  
-		    ip= info.getMacAddress();  
+		    ip= GetMAC(mContext);
 		  
 		} else{
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -382,7 +391,7 @@ public class NetWorkUtils {
 
 		{
 
-			Log.e("WifiPreference IpAddress", ex.toString());
+
 
 		}
 
@@ -475,5 +484,119 @@ public class NetWorkUtils {
             is.close();
 		}
 		return null;
+	}
+
+
+	static String Mac=null;
+	public static String GetMAC(Context context)
+	{
+		if(null !=Mac)return Mac;
+
+		if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M)
+		{
+			Mac = getMacDeafult(context);
+		}
+		else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M &&Build.VERSION.SDK_INT<=Build.VERSION_CODES.N)
+		{
+			Mac = getMacAddress();
+		}
+		else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+			Mac = getMacFromHardware();
+		}
+
+		return Mac;
+
+	}
+
+	//Android 6之前
+	private static String getMacDeafult(Context context){
+		String Mac = "";
+		if(context == null)
+		{
+			return Mac;
+		}
+		WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo info =null;
+		try{
+			info = wifi.getConnectionInfo();
+		}catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		if(info == null)
+		{
+			return null;
+		}
+		Mac = info.getMacAddress();
+		if(!TextUtils.isEmpty(Mac))
+		{
+			Mac = Mac.toUpperCase(Locale.ENGLISH);
+		}
+		return Mac;
+	}
+
+	/**
+	 * Android 6.0-Android 7.0 获取mac地址
+	 */
+	private static String getMacAddress() {
+		String Mac = null;
+		String str = "";
+
+
+		try {
+			Process pp = Runtime.getRuntime().exec("cat/sys/class/net/wlan0/address");
+			InputStreamReader ir = new InputStreamReader(pp.getInputStream());
+			LineNumberReader input = new LineNumberReader(ir);
+
+
+			while (null != str) {
+				str = input.readLine();
+				if (str != null) {
+					Mac = str.trim();//去空格
+					break;
+				}
+			}
+		} catch (IOException ex) {
+			// 赋予默认值
+			ex.printStackTrace();
+		}
+
+
+		return Mac;
+	}
+
+	/**
+	 * Android 7.0之后獲取Mac地址
+	 * 遍歷循環所有的網絡接口,找到接口是wlan0
+	 * 必須權限
+	 *	<uses-permission android:name="android.permission.INTERNET"/>
+	 * @return
+	 */
+	private static String getMacFromHardware() {
+		try {
+			List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+			for (NetworkInterface nif : all) {
+				if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+				byte[] macBytes = nif.getHardwareAddress();
+				if (macBytes == null) {
+					return "";
+				}
+
+				StringBuilder res1 = new StringBuilder();
+				for (byte b : macBytes) {
+					res1.append(String.format("%02X:", b));
+				}
+
+				if (res1.length() > 0) {
+					res1.deleteCharAt(res1.length() - 1);
+				}
+				return res1.toString();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "02:00:00:00:00:00";
 	}
 }

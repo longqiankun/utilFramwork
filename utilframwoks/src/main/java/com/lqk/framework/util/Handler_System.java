@@ -78,8 +78,11 @@ public class Handler_System {
 	 * @return
 	 * @return String
 	 */
+	static String AppName=null;
 	public static String getAppName() {
-		return getAppName(null);
+		if(null !=AppName)return AppName;
+		AppName = getAppName(null);
+		return AppName;
 	}
 
 	/**
@@ -548,7 +551,7 @@ public class Handler_System {
 	 * 获得android设备-唯一标识，android2.2 之前无法稳定运行.
 	 * */
 	public static String getDeviceId(Context mCm) {
-		return Secure.getString(mCm.getContentResolver(), Secure.ANDROID_ID);
+		return getDeviceId();
 	}
 
 	/**
@@ -558,9 +561,12 @@ public class Handler_System {
 	 * @return
 	 * @return String
 	 */
+	static String ANDROID_ID=null;
 	private static String getDeviceId() {
-		return Secure.getString(Ioc.getIoc().getApplication()
+		if(null !=ANDROID_ID)return ANDROID_ID;
+		ANDROID_ID= Secure.getString(Ioc.getIoc().getApplication()
 				.getContentResolver(), Secure.ANDROID_ID);
+		return ANDROID_ID;
 	}
 
 	public static String getImei() {
@@ -903,7 +909,15 @@ public class Handler_System {
 	  		}
 	  		return serialnum;
 	  	}
-	   
+
+	  	static String IMEI=null;
+	   public static String getmIMEI(){
+	   	if(null != IMEI)return IMEI;
+		   //1并且用户应当允许安装此应用。作为手机来讲，IMEI是唯一的，它应该类似于 359881030314356（除非你有一个没有量产的手机（水货）它可能有无
+		   TelephonyManager TelephonyMgr = (TelephonyManager)Ioc.getIoc().getApplication().getSystemService(Context.TELEPHONY_SERVICE);
+		   IMEI = TelephonyMgr.getDeviceId();
+		   return IMEI;
+	   }
 	   /**
 		 * 
 		* @Title: getDeviceUnique
@@ -916,19 +930,18 @@ public class Handler_System {
 		public static String getDeviceUnique(Context context){
 			
 			//1并且用户应当允许安装此应用。作为手机来讲，IMEI是唯一的，它应该类似于 359881030314356（除非你有一个没有量产的手机（水货）它可能有无
-			TelephonyManager TelephonyMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE); 
-			String m_szImei = TelephonyMgr.getDeviceId();
+			String m_szImei =getmIMEI();
 			
 			//2通过取出ROM版本、制造商、CPU型号、以及其他硬件信息来实现这一点。这样计算出来的ID不是唯一的（因为如果两个手机应用了同样的硬件以及Rom 镜像）
 			String m_szDevIDShort = "35" + //we make this look like a valid IMEI 
 			Build.BOARD.length()%10+ Build.BRAND.length()%10 + Build.CPU_ABI.length()%10 + Build.DEVICE.length()%10 + Build.DISPLAY.length()%10 + Build.HOST.length()%10 + Build.ID.length()%10 + Build.MANUFACTURER.length()%10 + Build.MODEL.length()%10 + Build.PRODUCT.length()%10 + Build.TAGS.length()%10 + Build.TYPE.length()%10 + Build.USER.length()%10 ; //13 digits  
 			
 			//3通常被认为不可信，因为它有时为null。开发文档中说明了：这个ID会改变如果进行了出厂设置。并且，如果某个Andorid手机被Root过的话，这个ID也可以被任意改变。
-			String m_szAndroidID = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+			String m_szAndroidID = getDeviceId();
 			
 			//4是另一个唯一ID。但是你需要为你的工程加入android.permission.ACCESS_WIFI_STATE 权限，否则这个地址会为null。
 			WifiManager wm = (WifiManager)context.getSystemService(Context.WIFI_SERVICE); 
-			String m_szWLANMAC = wm.getConnectionInfo().getMacAddress();
+			String m_szWLANMAC =NetWorkUtils.GetMAC(context);
 			
 			//5只在有蓝牙的设备上运行
 			BluetoothAdapter m_BluetoothAdapter = null; // Local Bluetooth adapter  
