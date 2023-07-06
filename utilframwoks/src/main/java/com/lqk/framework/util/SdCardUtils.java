@@ -247,6 +247,16 @@ public class SdCardUtils {
 		createFile(path);
 		return path;
 	}
-	
+	public static String getExtraImgPath(Context context, String name) throws IOException, NameNotFoundException {
+		String imageDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getAppName(context) + "/Image";
+		File f = new File(imageDir);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+
+		String path = imageDir + "/" + name;
+		createFile(path);
+		return path;
+	}
 
 }
